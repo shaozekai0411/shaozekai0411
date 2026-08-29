@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投诉电话查询大全｜酒店·电商·游戏·互联网·全国区县市</title>
+<style>
+  :root{
+    --primary:#c0392b;
+    --primary-dark:#a93226;
+    --bg:#f5f6fa;
+    --card:#ffffff;
+    --text:#2c3e50;
+    --text-light:#7f8c8d;
+    --border:#e3e6ea;
+    --blue:#2980b9;
+    --green:#27ae60;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  header{
+    background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+    color:#fff;
+    padding:26px 16px 16px;
+    text-align:center;
+  }
+  header h1{font-size:23px;font-weight:700;letter-spacing:1px;}
+  header p{font-size:13px;opacity:.9;margin-top:6px;}
+  .search-wrap{
+    max-width:780px;margin:16px auto 0;padding:0 16px;
+  }
+  .search-box{
+    display:flex;background:#fff;border-radius:12px;overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+  }
+  .search-box input{
+    flex:1;border:none;outline:none;padding:14px 16px;font-size:15px;color:var(--text);
+  }
+  .search-box button{
+    background:var(--primary);color:#fff;border:none;padding:0 22px;font-size:15px;cursor:pointer;
+  }
+  nav{
+    display:flex;max-width:780px;margin:14px auto 0;gap:8px;overflow-x:auto;padding:0 16px 6px;
+    -webkit-overflow-scrolling:touch;
+  }
+  nav button{
+    flex-shrink:0;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);
+    padding:8px 15px;border-radius:20px;font-size:13px;cursor:pointer;transition:.2s;
+  }
+  nav button.active{background:#fff;color:var(--primary);font-weight:600;border-color:#fff;}
+  main{max-width:780px;margin:0 auto;padding:16px;padding-bottom:60px;}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 12px;}
+  .toolbar h2{font-size:17px;font-weight:700;color:var(--primary-dark);}
+  .toolbar button{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;color:var(--text);}
+  .group-title{
+    display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;margin:20px 0 10px;
+    padding-top:14px;border-top:2px solid var(--border);color:var(--primary-dark);
+  }
+  .card{
+    background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);
+    padding:14px 16px;margin-bottom:12px;border:1px solid var(--border);
+  }
+  .card h3{font-size:16px;font-weight:600;}
+  .card .sub{font-size:14px;color:var(--text-light);margin-top:6px;}
+  .phone-list{list-style:none;}
+  .phone-list li{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 4px;
+    border-bottom:1px dashed var(--border);
+  }
+  .phone-list li:last-child{border-bottom:none;}
+  .phone-list .name{font-size:15px;font-weight:500;}
+  .phone-list .note{font-size:12px;color:var(--text-light);}
+  .phone-list .num{font-family:Consolas,Menlo,monospace;font-size:15px;font-weight:700;color:var(--blue);white-space:nowrap;}
+  .actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+  .btn-call{
+    display:inline-flex;align-items:center;gap:4px;background:var(--green);color:#fff;
+    border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;text-decoration:none;
+  }
+  .btn-copy{
+    display:inline-flex;align-items:center;gap:4px;background:#ecf0f1;color:var(--text);
+    border:none;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;
+  }
+  .btn-copy.copied{background:#d5f5e3;color:var(--green);}
+  .notice{
+    background:#fef9e7;border:1px solid #f7dc6f;color:#7d6608;border-radius:10px;
+    padding:12px 14px;font-size:13px;margin-bottom:16px;
+  }
+  .notice.blue{background:#eaf2fb;border-color:#a9cce3;color:#1f618d;}
+  .empty{text-align:center;color:var(--text-light);padding:40px 0;display:none;}
+  footer{
+    text-align:center;color:var(--text-light);font-size:12px;padding:20px 16px 30px;
+  }
+  .hotline-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;
+  }
+  .hotline-item{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;
+    box-shadow:0 1px 4px rgba(0,0,0,.04);
+  }
+  .hotline-item .l{font-size:13px;color:var(--text-light);}
+  .hotline-item .v{font-size:17px;font-weight:700;color:var(--primary);font-family:Consolas,Menlo,monospace;margin-top:2px;}
+  .hotline-item .d{font-size:12px;color:var(--text-light);margin-top:2px;}
+  @media (max-width:480px){
+    header h1{font-size:19px;}
+    .phone-list .num{font-size:14px;}
+    .phone-list .name{font-size:14px;}
+    .phone-list .note{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📞 投诉电话查询大全</h1>
+  <p>酒店 · 电商购物 · 游戏 · 互联网大厂 · 全国统一热线 · 各区县市</p>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="输入关键词搜索，如：携程 / 京东 / 原神 / 鹿城 / 12315…">
+    <button onclick="doSearch()">搜索</button>
+  </div>
+</div>
+
+<nav id="tabNav">
+  <button class="active" data-tab="hotel">🏨 酒店平台</button>
+  <button data-tab="group">🏢 酒店集团</button>
+  <button data-tab="shop">🛒 电商购物</button>
+  <button data-tab="game">🎮 游戏平台</button>
+  <button data-tab="tech">🏭 互联网大厂</button>
+  <button data-tab="nation">🇨🇳 全国热线</button>
+  <button data-tab="region">🏙️ 区县市</button>
+  <button data-tab="guide">📋 维权指南</button>
+</nav>
+
+<main>
+
+  <!-- 酒店平台 -->
+  <section id="tab-hotel" class="tab-section">
+    <div class="toolbar"><h2>🏨 酒店预订平台 客服 / 投诉电话</h2></div>
+    <div class="notice">
+      💡 提示：预订酒店遇价格欺诈、强制取消、到店无房等问题，可先向<b>平台客服</b>投诉；平台处理不满意，可拨打 <b>12315</b> 或 <b>12345</b> 升级投诉。请以各平台官网最新公布为准。
+    </div>
+    <ul class="phone-list" id="hotelList"></ul>
+  </section>
+
+  <!-- 酒店集团 -->
+  <section id="tab-group" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🏢 酒店集团 客服 / 投诉电话</h2></div>
+    <div class="notice blue">
+      💡 直接入住或通过集团官方渠道预订时，可联系各酒店集团客服；国际集团在中国大陆均设有中文客服热线。
+    </div>
+    <div class="group-title">🌍 国际酒店集团</div>
+    <ul class="phone-list" id="groupIntlList"></ul>
+    <div class="group-title">🇨🇳 国内酒店集团</div>
+    <ul class="phone-list" id="groupDomList"></ul>
+  </section>
+
+  <!-- 电商购物 -->
+  <section id="tab-shop" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🛒 电商购物平台 客服 / 投诉电话</h2></div>
+    <div class="notice">
+      💡 网购纠纷：先找平台客服 → 不满意拨打 <b>12315</b>（市场监管）升级投诉。未公布统一电话的平台，请在 <b>App 内联系官方客服</b>，谨防假冒客服诈骗。
+    </div>
+    <ul class="phone-list" id="shopList"></ul>
+  </section>
+
+  <!-- 游戏平台 -->
+  <section id="tab-game" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🎮 游戏平台 客服 / 投诉电话</h2></div>
+    <div class="notice blue">
+      💡 涉及充值退款、封号、未成年人消费等问题，可联系游戏厂商客服；未成年人未经家长同意的消费可拨打厂商的<b>未成年成长关爱热线</b>，或通过 <b>12345</b> / 网信部门渠道反映。
+    </div>
+    <ul class="phone-list" id="gameList"></ul>
+  </section>
+
+  <!-- 互联网大厂 -->
+  <section id="tab-tech" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🏭 互联网大厂 &amp; 运营商 综合服务热线</h2></div>
+    <div class="notice">
+      💡 覆盖主流互联网公司总部客服与三大运营商热线，遇到账户、支付、会员、通信等问题可拨打对应号码。
+    </div>
+    <ul class="phone-list" id="techList"></ul>
+  </section>
+
+  <!-- 全国热线 -->
+  <section id="tab-nation" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🇨🇳 全国统一投诉 / 服务热线</h2></div>
+    <div class="notice">
+      💡 自 2021 年起，<b>12301（旅游）、12318（文化市场）、12358（价格）、12365（质检）、12369（环保）、12319（城建）</b>等热线已陆续并入 <b>12345</b>。旅游/酒店/消费类投诉统一拨打 <b>12345</b> 或 <b>12315</b> 即可。
+    </div>
+    <ul class="phone-list" id="nationList"></ul>
+  </section>
+
+  <!-- 区县市 -->
+  <section id="tab-region" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>🏙️ 全国各区县市投诉电话</h2></div>
+    <div class="notice blue">
+      💡 <b>重要说明：</b>按照国务院统一部署，<b>12345</b> 政务服务便民热线已覆盖<b>全国所有省市县（区）</b>——在全国任何区、县、市，拨打 12345 即可接通当地政务服务热线；拨打 <b>12315</b> 接通当地市场监管消费投诉。下表列出全国各省、浙江省各地市及温州市各区县渠道。
+    </div>
+    <div class="group-title">🗺️ 全国各省（自治区、直辖市）· 统一 12345</div>
+    <div class="hotline-grid" id="provinceGrid"></div>
+
+    <div class="group-title">🇿 浙江省 11 地市 · 统一 12345</div>
+    <div class="hotline-grid" id="zjGrid"></div>
+
+    <div class="group-title">🏙️ 温州市及各区县 · 市场监管投诉电话</div>
+    <ul class="phone-list" id="wenzhouList"></ul>
+
+    <div class="group-title">🏢 温州物业服务投诉举报热线</div>
+    <ul class="phone-list" id="propertyList"></ul>
+  </section>
+
+  <!-- 维权指南 -->
+  <section id="tab-guide" class="tab-section" style="display:none;">
+    <div class="toolbar"><h2>📋 维权指南</h2></div>
+    <div class="card">
+      <h3>1️⃣ 先找谁投诉？</h3>
+      <p class="sub">
+        <b>第一步：平台 / 商家客服</b> —— 订单在哪个平台/商家订的，先打其客服电话。<br>
+        <b>第二步：12315 / 12345</b> —— 平台不处理或处理不满意，拨打 12315（市场监管）或 12345（政务服务），说明商家名称、订单号、诉求。<br>
+        <b>第三步：主管部门</b> —— 涉及卫生、消防、价格违法等，可向当地文旅局、卫健委、市监局反映。
+      </p>
+    </div>
+    <div class="card">
+      <h3>2️⃣ 常见投诉事项与对应渠道</h3>
+      <ul class="phone-list" style="padding-top:6px;">
+        <li><span><b>到店无房 / 临时涨价</b><div class="note">属合同违约，先找平台，再打 12315</div></span><span class="num">12315</span></li>
+        <li><span><b>网购假货 / 退款纠纷</b><div class="note">属市场监管，拨打 12315</div></span><span class="num">12315</span></li>
+        <li><span><b>游戏充值 / 未成年人消费</b><div class="note">先找厂商客服，家长可打未成年关爱热线</div></span><span class="num">12345</span></li>
+        <li><span><b>旅游行程 / 旅行社纠纷</b><div class="note">已并入政务服务热线</div></span><span class="num">12345</span></li>
+        <li><span><b>价格欺诈 / 乱收费</b><div class="note">价格举报已并入 12315</div></span><span class="num">12315</span></li>
+        <li><span><b>人身安全 / 突发事件</b><div class="note">立即报警 / 急救</div></span><span class="num">110/120</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>3️⃣ 投诉注意事项</h3>
+      <p class="sub">
+        ✅ 保留好订单号、付款记录、聊天/通话截图、发票等证据。<br>
+        ✅ 拨打时说明：商家全称、详细地址、发生时间、具体诉求。<br>
+        ✅ 12315 可通过「全国 12315 平台」小程序在线投诉，更方便留痕。<br>
+        ⚠️ 谨防冒充客服的诈骗电话，官方客服不会要求转账 / 提供验证码。
+      </p>
+    </div>
+  </section>
+
+  <div class="empty" id="emptyResult">未找到相关结果，请更换关键词试试。</div>
+
+</main>
+
+<footer>
+  数据整理于 2026-08 · 电话号码可能调整，请以官方最新公布为准<br>
+  本页面仅供信息参考，不构成任何法律建议
+</footer>
+
+<script>
+// ============ 数据 ============
+const HOTELS = [
+  { name:"携程旅行", note:"境内统一客服热线（官方，酒店/机票/旅游投诉）", num:"95010" },
+  { name:"携程旅行", note:"备用热线（预订/客服）", num:"400-830-6666" },
+  { name:"去哪儿旅行", note:"境内统一客服热线（官方）", num:"95117" },
+  { name:"去哪儿旅行", note:"境外拨打", num:"+86-10-59606999" },
+  { name:"飞猪", note:"境内订单客服热线（官方）", num:"9510208" },
+  { name:"飞猪", note:"境外/港澳台订单（境内拨打）", num:"9510209" },
+  { name:"美团", note:"大陆地区消费者服务热线（官方）", num:"1010-7888" },
+  { name:"美团", note:"海外及港澳台地区", num:"(+86) 311-8654-7100" },
+  { name:"同程旅行", note:"24小时服务热线（官方）", num:"95711" },
+  { name:"艺龙旅行", note:"国内客服热线（官方）", num:"4009-333-333" },
+  { name:"途牛旅游", note:"24h 客户服务电话（免长途费）", num:"4007-999-999" },
+  { name:"抖音", note:"官方客服热线（抖音内订酒店）", num:"95152" },
+  { name:"Trip.com（携程国际版）", note:"App / 官网在线客服，支持免费网络回拨", num:"在线客服" },
+  { name:"Booking.com", note:"中国区普通话客服（官方）", num:"400-882-2810" },
+  { name:"Booking.com", note:"粤语客服", num:"400-882-2815" },
+  { name:"Booking.com", note:"国际（英文）客服", num:"+44 20 3320 2609" },
+  { name:"Agoda（安可达）", note:"请通过 App / 帮助中心联系在线客服", num:"在线客服" },
+  { name:"爱彼迎 Airbnb", note:"请通过 App / 帮助中心联系在线客服", num:"在线客服" },
+];
+
+const GROUP_INTL = [
+  { name:"万豪国际 Marriott", note:"大陆地区客户服务与常客计划热线（官方）", num:"400-688-9889" },
+  { name:"万豪国际 Marriott", note:"备用客服热线", num:"400-890-3588" },
+  { name:"希尔顿 Hilton", note:"中国区客服热线（官方）", num:"400-820-8165" },
+  { name:"希尔顿 Hilton", note:"备用客服热线", num:"400-820-3011" },
+  { name:"洲际 IHG", note:"中国区预订/客服热线（座机）", num:"400-884-0888" },
+  { name:"洲际 IHG", note:"中国区客服热线（手机拨打）", num:"400-882-3880" },
+  { name:"雅高 Accor", note:"中国区客服热线（铂尔曼/索菲特/诺富特等）", num:"400-818-2688" },
+  { name:"温德姆 Wyndham", note:"中国区预订及问询（官方）", num:"400-821-8831" },
+  { name:"凯悦 Hyatt", note:"请通过官网 / App 联系中国区客服", num:"在线客服" },
+  { name:"香格里拉 Shangri-La", note:"请通过官网 / App 联系客服", num:"在线客服" },
+];
+
+const GROUP_DOM = [
+  { name:"华住会", note:"华住集团（汉庭/全季/桔子/海友/宜必思/美居等），24小时服务热线（官方）", num:"4008-121-121" },
+  { name:"华住会", note:"华住会会员服务专线", num:"95795999" },
+  { name:"华住集团总部", note:"总部咨询电话（上海市长宁区虹桥路2266号）", num:"021-6195-9590" },
+  { name:"首旅如家", note:"全国订房/客服电话（如家/和颐/建国等）（官方）", num:"400-820-3333" },
+  { name:"锦江酒店 WeHotel", note:"锦江集团（锦江之星/维也纳/7天/麗枫/喆啡等）（官方）", num:"400-820-9999" },
+  { name:"格林酒店集团", note:"格林豪泰/格林东方等，24小时客服（官方）", num:"4006-998-998" },
+  { name:"维也纳酒店", note:"客服热线", num:"400-888-2888" },
+  { name:"亚朵酒店", note:"客服热线（请以官网为准）", num:"4000-606-606" },
+];
+
+const SHOPPING = [
+  { name:"淘宝 / 天猫", note:"阿里消费者服务热线（官方）", num:"9510211" },
+  { name:"闲鱼", note:"同属阿里系消费者热线", num:"9510211" },
+  { name:"京东", note:"京东客服热线（官方帮助中心）", num:"95118" },
+  { name:"京东", note:"京东服务热线（备用）", num:"950618" },
+  { name:"唯品会", note:"客服电话（官方）", num:"400-6789-888" },
+  { name:"唯品会", note:"备用热线", num:"95718" },
+  { name:"苏宁易购", note:"全国客服热线（官方）", num:"4008-365-365" },
+  { name:"国美", note:"客服电话 / 国美管家（官方）", num:"400-811-3333" },
+  { name:"网易严选", note:"同属网易客服热线", num:"95163234" },
+  { name:"当当", note:"客服电话（官方）", num:"400-106-6666" },
+  { name:"当当", note:"24小时热线", num:"0527-80878888" },
+  { name:"拼多多", note:"官方未公布统一电话，请在 App 内联系官方客服", num:"App内客服" },
+  { name:"得物", note:"官方未公布统一电话，请在 App 内联系官方客服", num:"App内客服" },
+  { name:"饿了么", note:"官方未公布统一电话，请在 App 内联系官方客服", num:"App内客服" },
+  { name:"抖音电商", note:"抖音官方客服热线（含抖音购物/直播）", num:"95152" },
+  { name:"快手小店", note:"快手客服热线（官方）", num:"400-126-0088" },
+  { name:"小红书", note:"官方未公布统一电话，请在 App 内联系官方客服", num:"App内客服" },
+  { name:"亚马逊中国（海外购）", note:"请通过官网 / App 联系在线客服", num:"在线客服" },
+];
+
+const GAMES = [
+  { name:"腾讯游戏 / 腾讯客服", note:"腾讯服务专线（覆盖游戏/微信/QQ 等，官方）", num:"4006-700-700" },
+  { name:"微信支付 / 财付通", note:"支付服务专线（大陆地区）", num:"95017" },
+  { name:"网易游戏 / 网易", note:"网易客服热线（梦幻西游/阴阳师等，官方）", num:"95163234" },
+  { name:"米哈游", note:"官方客服电话（原神/崩坏/星穹铁道等）", num:"400-666-6312" },
+  { name:"米哈游", note:"未成年成长关爱热线（家长反馈/投诉专线）", num:"021-60371740" },
+  { name:"完美世界", note:"游戏客服电话（官方）", num:"4009-10-10-10" },
+  { name:"B站游戏", note:"B站游戏问题客服热线（官方）", num:"400-178-2233" },
+  { name:"盛趣游戏", note:"请通过官网 / App 联系客服（传奇等）", num:"在线客服" },
+];
+
+const TECH = [
+  { name:"阿里巴巴", note:"集团消费者服务热线（淘宝/天猫/闲鱼等）", num:"9510211" },
+  { name:"腾讯", note:"集团服务专线（微信/QQ/游戏等）", num:"4006-700-700" },
+  { name:"字节跳动", note:"官方服务热线（抖音/今日头条等）", num:"95152" },
+  { name:"京东集团", note:"客户服务热线", num:"95118" },
+  { name:"网易", note:"客服热线", num:"95163234" },
+  { name:"美团", note:"消费者服务热线", num:"1010-7888" },
+  { name:"拼多多", note:"请在 App 内联系官方客服", num:"App内客服" },
+  { name:"快手", note:"客服热线（官方）", num:"400-126-0088" },
+  { name:"哔哩哔哩 B站", note:"会员购 / 大会员客服热线（官方）", num:"400-626-2233" },
+  { name:"华为", note:"消费者服务热线（7×24）", num:"950800" },
+  { name:"小米", note:"客户服务热线", num:"950816" },
+  { name:"中国移动", note:"客服热线", num:"10086" },
+  { name:"中国联通", note:"客服热线", num:"10010" },
+  { name:"中国电信", note:"客户服务热线", num:"10000" },
+  { name:"中国电信", note:"集团投诉监督电话", num:"10005" },
+];
+
+const NATION = [
+  { name:"12345", note:"政务服务便民热线（全国所有区县市统一入口，旅游/酒店/消费投诉首选）", num:"12345" },
+  { name:"12315", note:"消费者投诉举报专线（全国 12315 平台，市场监管总局）", num:"12315" },
+  { name:"12301", note:"原全国旅游服务热线（已并入 12345）", num:"12301" },
+  { name:"12328", note:"交通运输服务监督电话", num:"12328" },
+  { name:"12333", note:"人力资源社会保障服务热线", num:"12333" },
+  { name:"12366", note:"税务服务热线", num:"12366" },
+  { name:"12348", note:"公共法律服务热线（免费法律咨询）", num:"12348" },
+  { name:"12320", note:"卫生健康热线", num:"12320" },
+  { name:"12321", note:"网络不良与垃圾信息举报", num:"12321" },
+  { name:"12351", note:"工会职工维权服务热线", num:"12351" },
+  { name:"12309", note:"检察院服务热线", num:"12309" },
+  { name:"12368", note:"法院诉讼服务热线", num:"12368" },
+  { name:"12386", note:"证监会服务热线", num:"12386" },
+  { name:"12393", note:"医疗保障服务热线", num:"12393" },
+  { name:"95598", note:"国家电网供电服务热线", num:"95598" },
+  { name:"110", note:"报警（人身安全 / 紧急情况）", num:"110" },
+  { name:"120", note:"急救", num:"120" },
+];
+
+// 全国 34 省级行政区（均使用 12345）
+const PROVINCES = [
+  { l:"北京市", v:"12345", d:"市政务服务便民热线" },
+  { l:"天津市", v:"12345", d:"市政务服务便民热线" },
+  { l:"上海市", v:"12345", d:"市民服务热线" },
+  { l:"重庆市", v:"12345", d:"政务服务便民热线" },
+  { l:"河北省", v:"12345", d:"各市县统一" },
+  { l:"山西省", v:"12345", d:"各市县统一" },
+  { l:"辽宁省", v:"12345", d:"各市县统一" },
+  { l:"吉林省", v:"12345", d:"各市县统一" },
+  { l:"黑龙江省", v:"12345", d:"各市县统一" },
+  { l:"江苏省", v:"12345", d:"各市县统一" },
+  { l:"浙江省", v:"12345", d:"省市县三级贯通" },
+  { l:"安徽省", v:"12345", d:"各市县统一" },
+  { l:"福建省", v:"12345", d:"各市县统一" },
+  { l:"江西省", v:"12345", d:"各市县统一" },
+  { l:"山东省", v:"12345", d:"各市县统一" },
+  { l:"河南省", v:"12345", d:"各市县统一" },
+  { l:"湖北省", v:"12345", d:"各市县统一" },
+  { l:"湖南省", v:"12345", d:"各市县统一" },
+  { l:"广东省", v:"12345", d:"各市县统一" },
+  { l:"海南省", v:"12345", d:"各市县统一" },
+  { l:"四川省", v:"12345", d:"各市县统一" },
+  { l:"贵州省", v:"12345", d:"各市县统一" },
+  { l:"云南省", v:"12345", d:"各市县统一" },
+  { l:"陕西省", v:"12345", d:"各市县统一" },
+  { l:"甘肃省", v:"12345", d:"各市县统一" },
+  { l:"青海省", v:"12345", d:"各市县统一" },
+  { l:"台湾省", v:"—", d:"不适用大陆12345" },
+  { l:"内蒙古自治区", v:"12345", d:"各盟市统一" },
+  { l:"广西壮族自治区", v:"12345", d:"各市县统一" },
+  { l:"西藏自治区", v:"12345", d:"各地市统一" },
+  { l:"宁夏回族自治区", v:"12345", d:"各市县统一" },
+  { l:"新疆维吾尔自治区", v:"12345", d:"各地州统一" },
+  { l:"香港特别行政区", v:"+852 1823", d:"政府热线（投诉/查询）" },
+  { l:"澳门特别行政区", v:"+853 2833 7676", d:"政府资讯热线" },
+];
+
+// 浙江省 11 地市（均 12345）
+const ZHEJIANG = [
+  { l:"杭州市", v:"12345", d:"含各区县" },
+  { l:"宁波市", v:"12345", d:"含各区县" },
+  { l:"温州市", v:"12345", d:"含各区县" },
+  { l:"嘉兴市", v:"12345", d:"含各区县" },
+  { l:"湖州市", v:"12345", d:"含各区县" },
+  { l:"绍兴市", v:"12345", d:"含各区县" },
+  { l:"金华市", v:"12345", d:"含各区县" },
+  { l:"衢州市", v:"12345", d:"含各区县" },
+  { l:"舟山市", v:"12345", d:"含各区县" },
+  { l:"台州市", v:"12345", d:"含各区县" },
+  { l:"丽水市", v:"12345", d:"含各区县" },
+];
+
+const WENZHOU = [
+  { name:"温州市本级", note:"市市场监管局（公平竞争/消费投诉）", num:"0577-86991602" },
+  { name:"鹿城区", note:"0577-88060328 / 88060355", num:"0577-88060328", extra:"88060355" },
+  { name:"龙湾区", note:"", num:"0577-86500315" },
+  { name:"瓯海区", note:"", num:"0577-88572502" },
+  { name:"洞头区", note:"", num:"0577-63359009" },
+  { name:"乐清市", note:"", num:"0577-62592755" },
+  { name:"瑞安市", note:"0577-65623225 / 65897315", num:"0577-65623225", extra:"65897315" },
+  { name:"永嘉县", note:"", num:"0577-57689860" },
+  { name:"文成县", note:"0577-67892028 / 67892036", num:"0577-67892028", extra:"67892036" },
+  { name:"平阳县", note:"", num:"0577-63739013" },
+  { name:"泰顺县", note:"", num:"0577-67582179" },
+  { name:"苍南县", note:"", num:"0577-68877315" },
+  { name:"龙港市", note:"", num:"0577-64216315" },
+  { name:"温州经开区", note:"", num:"0577-86906968" },
+  { name:"瓯江口新区", note:"", num:"0577-88078760" },
+];
+
+const PROPERTY = [
+  { name:"鹿城区", note:"", num:"0577-88180850" },
+  { name:"龙湾区", note:"", num:"0577-86882258" },
+  { name:"瓯海区", note:"", num:"0577-88537782" },
+  { name:"洞头区", note:"", num:"0577-63486068" },
+  { name:"乐清市", note:"", num:"0577-62523902" },
+  { name:"瑞安市", note:"", num:"0577-65897317" },
+  { name:"永嘉县", note:"", num:"0577-67952261" },
+  { name:"文成县", note:"", num:"0577-59029259" },
+  { name:"平阳县", note:"", num:"0577-63889103" },
+  { name:"泰顺县", note:"", num:"0577-59291955" },
+  { name:"苍南县", note:"", num:"0577-59896023" },
+  { name:"龙港市", note:"", num:"0577-59902522" },
+  { name:"海经区", note:"", num:"0577-88078501" },
+];
+
+// ============ 渲染 ============
+function telHref(num){
+  const clean = num.replace(/[^0-9+]/g,'');
+  if(/^[0-9+]{5,}$/.test(clean)) return 'tel:'+clean;
+  return '#';
+}
+
+function itemHtml(item, withCall){
+  const callBtn = withCall && item.num !== '在线客服' && item.num !== 'App内客服' && item.num !== '—'
+    ? '<a class="btn-call" href="'+telHref(item.num)+'">拨打</a>'
+    : '';
+  return '<li>'+
+    '<span><span class="name">'+item.name+'</span>'+
+    (item.note?'<div class="note">'+item.note+'</div>':'')+
+    (item.extra?'<div class="note">备用：'+item.extra+'</div>':'')+
+    '</span>'+
+    '<span class="actions">'+
+      '<span class="num">'+item.num+'</span>'+
+      callBtn+
+      '<button class="btn-copy" onclick="copyNum(this,\''+item.num+'\')">复制</button>'+
+    '</span>'+
+    '</li>';
+}
+
+function renderList(id, arr, withCall){
+  document.getElementById(id).innerHTML = arr.map(i=>itemHtml(i, withCall)).join('');
+}
+
+function renderGrid(id, arr){
+  document.getElementById(id).innerHTML = arr.map(i=>
+    '<div class="hotline-item"><div class="l">'+i.l+'</div><div class="v">'+i.v+'</div><div class="d">'+i.d+'</div></div>'
+  ).join('');
+}
+
+renderList('hotelList', HOTELS, true);
+renderList('groupIntlList', GROUP_INTL, true);
+renderList('groupDomList', GROUP_DOM, true);
+renderList('shopList', SHOPPING, true);
+renderList('gameList', GAMES, true);
+renderList('techList', TECH, true);
+renderList('nationList', NATION, true);
+renderGrid('provinceGrid', PROVINCES);
+renderGrid('zjGrid', ZHEJIANG);
+renderList('wenzhouList', WENZHOU, true);
+renderList('propertyList', PROPERTY, true);
+
+// ============ 复制 ============
+function copyNum(btn, num){
+  navigator.clipboard.writeText(num).then(()=>{
+    btn.textContent = '已复制';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='复制';btn.classList.remove('copied');},1500);
+  });
+}
+
+// ============ 标签切换 ============
+document.querySelectorAll('#tabNav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#tabNav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-section').forEach(s=>s.style.display='none');
+    document.getElementById('tab-'+tab).style.display='';
+    document.getElementById('emptyResult').style.display='none';
+    document.getElementById('searchInput').value='';
+    clearSearchResult();
+  });
+});
+
+// ============ 搜索 ============
+function collectAll(){
+  return [
+    ...HOTELS.map(i=>({...i,src:'酒店平台'})),
+    ...GROUP_INTL.map(i=>({...i,src:'国际酒店集团'})),
+    ...GROUP_DOM.map(i=>({...i,src:'国内酒店集团'})),
+    ...SHOPPING.map(i=>({...i,src:'电商购物'})),
+    ...GAMES.map(i=>({...i,src:'游戏平台'})),
+    ...TECH.map(i=>({...i,src:'互联网大厂'})),
+    ...NATION.map(i=>({...i,src:'全国热线'})),
+    ...PROVINCES.map(i=>({name:i.l,note:i.d,num:i.v,src:'全国省区'})),
+    ...ZHEJIANG.map(i=>({name:i.l,note:i.d,num:i.v,src:'浙江地市'})),
+    ...WENZHOU.map(i=>({...i,src:'温州区县'})),
+    ...PROPERTY.map(i=>({...i,src:'温州物业'})),
+  ];
+}
+function doSearch(){
+  const kw = document.getElementById('searchInput').value.trim().toLowerCase();
+  clearSearchResult();
+  if(!kw){
+    document.querySelectorAll('#tabNav button').forEach(b=>b.classList.toggle('active', b.dataset.tab==='hotel'));
+    document.querySelectorAll('.tab-section').forEach(s=>{
+      s.style.display = (s.id==='tab-hotel') ? '' : 'none';
+    });
+    document.getElementById('emptyResult').style.display='none';
+    return;
+  }
+  document.querySelectorAll('.tab-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('#tabNav button').forEach(b=>b.classList.remove('active'));
+  const res = collectAll().filter(i=>
+    (i.name+' '+i.num+' '+(i.note||'')+' '+(i.extra||'')+' '+i.src).toLowerCase().includes(kw)
+  );
+  document.getElementById('emptyResult').style.display = res.length?'none':'block';
+  const container = document.createElement('div');
+  container.id = 'searchResult';
+  container.style.marginTop='16px';
+  if(res.length){
+    let html = '<div class="toolbar"><h2>搜索结果（'+res.length+' 条）</h2><button onclick="clearSearch()">清除搜索</button></div><ul class="phone-list">';
+    html += res.map(i=>itemHtml(i, true)).join('');
+    html += '</ul>';
+    container.innerHTML = html;
+  }
+  document.querySelector('main').appendChild(container);
+}
+document.getElementById('searchInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
+
+function clearSearchResult(){
+  const old = document.getElementById('searchResult');
+  if(old) old.remove();
+}
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  clearSearchResult();
+  document.querySelectorAll('#tabNav button').forEach(b=>b.classList.toggle('active', b.dataset.tab==='hotel'));
+  document.querySelectorAll('.tab-section').forEach(s=>{
+    s.style.display = (s.id==='tab-hotel') ? '' : 'none';
+  });
+  document.getElementById('emptyResult').style.display='none';
+}
+</script>
+</body>
+</html>
